@@ -1,0 +1,31 @@
+import os
+from shutil import copyfile
+import csv
+
+input_file_name = '/home/eshel_noam/Explanable_Efficient_ViT_DFD_W/model_test_train/results/tests/test_summary_All.csv'
+# output_file_name = 'test_examples.csv'
+destination_path = "/home/eshel_noam/Explanable_Efficient_ViT_DFD_W/explain_model/examples"
+
+with open(input_file_name) as input_file: #TODO: verify the right file name
+    csv_reader = csv.DictReader(input_file, delimiter=',')
+    # csv_writer = csv.writer(output_file)
+    line_count = 0
+
+    for row in csv_reader:
+        if line_count==0:
+            # row.move_to_end('example_full_file_name')
+            # csv_writer.writerow(row)
+            line_count += 1
+
+        else:
+            src_file = os.path.join(row["video_name"],row["example_file_name"])
+            y = src_file.split('/')
+            video_name = y[-2]
+            method_name = y[-3]
+            img_file_name = method_name +'_' + video_name + '_' + row["example_file_name"]
+            dst_name = os.path.join(destination_path,img_file_name )
+            copyfile(src_file,dst_name)
+            # row.append(img_file_name)
+            # csv_writer.writerow(row)
+
+            line_count += 1
